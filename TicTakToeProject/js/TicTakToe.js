@@ -36,22 +36,33 @@ boxes.forEach((box)=>{
         checkWinner();
     });
 });
-const checkWinner = ()=>{
-    for(let pattern of winPattern)
-    {        
-        let pos1Val= boxes[pattern[0]].innerText;
-        let pos2Val= boxes[pattern[1]].innerText;
-        let pos3Val= boxes[pattern[2]].innerText;
-        if (pos1Val != "" && pos2Val != "" && pos3Val != "")
-        {
-            if(pos1Val===pos2Val && pos2Val===pos3Val)
-            {
-                console.log("Winner is", pos1Val);
+const checkWinner = () => {
+    let winnerFound = false;
+
+    for (let pattern of winPattern) {
+        let pos1Val = boxes[pattern[0]].innerText;
+        let pos2Val = boxes[pattern[1]].innerText;
+        let pos3Val = boxes[pattern[2]].innerText;
+
+        if (pos1Val !== "" && pos2Val !== "" && pos3Val !== "") {
+            if (pos1Val === pos2Val && pos2Val === pos3Val) {
+                winnerFound = true;
                 showWinner(pos1Val);
                 disableBoxes();
+                return;
             }
         }
     }
+
+    // If all boxes are filled and no winner, it's a draw
+    let filledBoxes = Array.from(boxes).every(box => box.innerText !== "");
+    if (filledBoxes && !winnerFound) {
+        showDraw();
+    }
+};
+const showDraw = () => {
+    winningMsg.innerText = "It's a draw! Try again.";
+    wininngMsgContainer.classList.remove("hide");
 };
 let showWinner = (winner)=>{
     winningMsg.innerText = `Congratulations the winner is, ${winner}`;
